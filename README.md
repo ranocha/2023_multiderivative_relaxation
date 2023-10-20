@@ -27,7 +27,7 @@ use the implementations provided here, please **also** cite this repository as
          functionals via relaxation"},
   author={Ranocha, Hendrik and Sch{\"u}tz, Jochen},
   year={2023},
-  howpublished={\url{https://github.com/ranocha/2023_2derRK_relax}},
+  howpublished={\url{https://github.com/ranocha/2023_multiderivative_relaxation}},
   doi={TODO}
 }
 ```
