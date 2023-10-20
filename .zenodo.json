@@ -1,0 +1,18 @@
+{
+    "license": "MIT",
+    "title": "Reproducibility repository for Multiderivative time integration methods preserving nonlinear functionals via relaxation",
+    "upload_type": "software",
+    "creators": [
+        {
+            "affiliation": "Institute of Mathematics, Johannes Gutenberg University Mainz, Germany",
+            "name": "Ranocha, Hendrik",
+            "orcid": "0000-0002-3456-2277"
+        },
+        {
+            "affiliation": "Faculty of Sciences and Data Science Institute, Hasselt University, Belgium",
+            "name": "Schütz, Jochen",
+            "orcid": "0000-0002-6355-9130"
+        }
+    ],
+    "access_right": "open"
+}
