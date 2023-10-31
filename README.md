@@ -55,6 +55,8 @@ First, you need to download this repository, e.g., by cloning it with `git`
 or by downloading an archive via the GitHub interface. Then, you need to start
 Julia in the `code_julia` directory of this repository and follow the instructions
 described in the `README.md` file therein.
+Other numerical experiments use MATLAB, based on source code contained in the
+directory `code_matlab`.
 
 
 ## Authors
