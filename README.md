@@ -1,7 +1,7 @@
 # Multiderivative time integration methods preserving nonlinear functionals via relaxation
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/DOI/TODO.svg)](https://doi.org/TODO)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10057727.svg)](https://zenodo.org/doi/10.5281/zenodo.10057727)
 
 This repository contains information and code to reproduce the results presented in the
 article
@@ -28,7 +28,7 @@ use the implementations provided here, please **also** cite this repository as
   author={Ranocha, Hendrik and Sch{\"u}tz, Jochen},
   year={2023},
   howpublished={\url{https://github.com/ranocha/2023_multiderivative_relaxation}},
-  doi={TODO}
+  doi={10.5281/zenodo.10057727}
 }
 ```
 
