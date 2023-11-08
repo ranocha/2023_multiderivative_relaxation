@@ -11,8 +11,8 @@ article
          functionals via relaxation},
   author={Ranocha, Hendrik and Sch{\"u}tz, Jochen},
   year={2023},
-  doi={TODO},
-  eprint={TODO},
+  doi={10.48550/arXiv.2311.03883},
+  eprint={2311.03883},
   eprinttype={arxiv},
   eprintclass={math.NA}
 }
