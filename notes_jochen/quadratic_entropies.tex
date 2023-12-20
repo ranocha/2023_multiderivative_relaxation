@@ -1,0 +1,641 @@
+\documentclass[]{scrartcl}
+
+\usepackage[utf8]{luainputenc}
+\usepackage[USenglish]{babel}
+\usepackage{csquotes}
+
+\usepackage[a4paper,top=27mm,bottom=20mm,inner=25mm,outer=20mm]{geometry}
+
+% bibliography
+\usepackage[%
+  backend=bibtex,bibencoding=ascii,
+%   backend=biber,
+%   style=authoryear-comp, dashed=false,
+  style=numeric-comp,
+%   firstinits=true, uniquename=init, %abbreviate first names
+  giveninits=true, uniquename=init, %abbreviate first names
+  natbib=true,
+  url=true,
+  doi=true,
+  isbn=false,
+  backref=false,
+  maxnames=99,
+  ]{biblatex}
+\addbibresource{references.bib}
+
+% math packages
+\usepackage{amsmath}
+\allowdisplaybreaks
+\numberwithin{equation}{section}
+\usepackage{amssymb}
+\usepackage{commath}
+\usepackage{mathtools}
+\usepackage{bbm}
+\usepackage{nicefrac}
+\usepackage{subdepth}
+
+\usepackage{siunitx}
+\sisetup{separate-uncertainty=true, multi-part-units=single}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+
+\usepackage{amsthm}
+% \theoremstyle{plain}
+%   \newtheorem{theorem}{Theorem}
+%   \newtheorem{lemma}[theorem]{Lemma}
+%   \newtheorem{proposition}[theorem]{Proposition}
+%   \newtheorem{conjecture}[theorem]{Conjecture}
+%   \newtheorem{corollary}[theorem]{Corollary}
+% \theoremstyle{definition}
+%   \newtheorem{definition}[theorem]{Definition}
+%   \newtheorem{remark}[theorem]{Remark}
+%   \newtheorem{example}[theorem]{Example}
+%   \newtheorem{procedure}[theorem]{Procedure}
+%   \newtheorem{assumption}[theorem]{Assumption}
+% \numberwithin{theorem}{section}
+\usepackage{thmtools}
+% https://tex.stackexchange.com/questions/254398/in-theorem-style-how-to-make-the-dot-font-depend-on-the-name-font
+\usepackage{etoolbox}
+\makeatletter
+% don't typeset the note in a group, so the punctuation inherits
+% the font specification of the note
+\patchcmd{\thmt@setheadstyle}
+ {\bgroup\thmt@space}
+ {\thmt@space}
+ {}{}
+\patchcmd{\thmt@setheadstyle}
+ {\egroup\fi}
+ {\fi}
+ {}{}
+\makeatother
+\declaretheoremstyle[
+  bodyfont=\normalfont\itshape,
+  headformat=\NAME\ \NUMBER\NOTE,
+]{myplain}
+\declaretheoremstyle[
+  headformat=\NAME\ \NUMBER\NOTE,
+]{mydefinition}
+\newcommand{\envqed}{{\lower-0.3ex\hbox{$\triangleleft$}}}
+\declaretheorem[style=myplain,numberwithin=section]{theorem}
+\declaretheorem[style=myplain,numberlike=theorem]{lemma}
+\declaretheorem[style=myplain,numberlike=theorem]{proposition}
+\declaretheorem[style=myplain,numberlike=theorem]{conjecture}
+\declaretheorem[style=myplain,numberlike=theorem]{corollary}
+\declaretheorem[style=mydefinition,numberlike=theorem,qed=\envqed]{definition}
+\declaretheorem[style=mydefinition,numberlike=theorem,qed=\envqed]{remark}
+\declaretheorem[style=mydefinition,numberlike=theorem,qed=\envqed]{example}
+\declaretheorem[style=mydefinition,numberlike=theorem,qed=\envqed]{procedure}
+\declaretheorem[style=mydefinition,numberlike=theorem,qed=\envqed]{assumption}
+
+% load hyperref after amsmath to get rid of stupid ``destination with the same identifier...'' warnings
+\usepackage[plainpages=false,pdfpagelabels,hidelinks,unicode]{hyperref}
+
+% figures
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[small]{caption}
+\usepackage{subcaption}
+\usepackage{pdflscape}
+
+% suppress "multiple pdfs with page group included in a single page"
+% http://tex.stackexchange.com/questions/198586/conditional-based-on-the-version-of-pdflatex
+\begingroup\expandafter\expandafter\expandafter\endgroup
+\expandafter\ifx\csname pdfsuppresswarningpagegroup\endcsname\relax
+\else
+  \pdfsuppresswarningpagegroup=1\relax
+\fi
+
+% PGFPlots
+\usepackage{pgfplotstable}
+
+\usepgfplotslibrary{external}
+\usepackage{placeins}
+
+
+
+% tables
+\usepackage{booktabs}
+\usepackage{rotating}
+\usepackage{multirow}
+
+\usepackage{enumitem}
+
+% fonts
+\usepackage{ifluatex}
+\ifluatex
+  \usepackage[no-math]{fontspec}
+\else
+  \usepackage[T1]{fontenc}
+\fi
+\usepackage{newpxtext,newpxmath}
+
+% definitions
+\input{macros}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set this variable to true and delete the
+% generated images in tikz_images when the aim is
+% to recompile tikz figures.
+\newboolean{compilefromscratch}
+\setboolean{compilefromscratch}{false}
+\tikzexternalize[prefix=tikz_images/]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newcommand{\orcid}[1]{ORCID:~\href{https://orcid.org/#1}{#1}}
+\usepackage{authblk}
+% \renewcommand\Affilfont{\fontsize{8}{10.8}\selectfont}
+% \renewcommand\Affilfont{\usekomafont{section}}
+\renewcommand\Affilfont{\usekomafont{paragraph}}
+
+\newenvironment{keywords}{\par\textbf{Key words.}}{\par}
+\newenvironment{AMS}{\par\textbf{AMS subject classification.}}{\par}
+
+
+
+\title{Quadratic functional preserving schemes for linear equations}
+
+\author[1]{Hendrik~Ranocha\thanks{\orcid{0000-0002-3456-2277}}}
+\affil[1]{Institute of Mathematics, Johannes Gutenberg University Mainz, Staudingerweg 9, 55128 Mainz, Germany}
+
+\author[2]{Jochen Schütz\thanks{\orcid{0000-0002-6355-9130}}}
+\affil[2]{Faculty of Sciences \& Data Science Institute, Hasselt University, Agoralaan Gebouw D, BE-3590 Diepenbeek, Belgium}
+
+% \date{September 15, 2022} %TODO: date
+
+\makeatletter
+\hypersetup{pdfauthor={Hendrik Ranocha, Jochen Schütz}} % TODO: authors
+%\hypersetup{pdftitle={\title}} %TODO: title
+\makeatother
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+  %\input{abstract.tex}
+\end{abstract}
+
+%TODO: keywords
+\begin{keywords}
+  %two-derivative methods,
+  %multiderivative methods,
+  %invariants,
+  %conservative systems,
+  %dissipative systems,
+  %structure-preserving methods
+\end{keywords}
+
+%TODO: MSC
+\begin{AMS}
+  %65L06,  % NA, ODEs: Multistep, Runge-Kutta and extrapolation methods
+  %65M20,  % NA, PDEs, IVPs, IBVPs: Method of lines for initial value and initial-boundary value problems involving PDEs
+  %65M70   % NA, PDEs, IVPs, IBVPs: Spectral, collocation and related methods
+\end{AMS}
+
+In this work, we consider the \emph{linear} differential equation
+%
+\begin{align}
+ \label{eq:ode}
+ u'(t) = A u(t)
+\end{align}
+%
+for some matrix $A \in \R^{n \times n}$; equipped with suitable initial conditions $u(t\equiv 0) = u_0 \in \R^n$. We assume that the quadratic entropy
+%
+\begin{align}
+ \label{eq:entropy}
+ \eta(u) := u^T u
+\end{align}
+%
+is conserved, i.e., there holds $\eta(u(t)) = \eta(u(0))$ for all times $t$. Hence, we can compute
+%
+\begin{align*}
+ 0 \equiv \frac{\mathrm d}{\mathrm d t} \eta(u(t)) = \eta'(u) Au = u^T A u.
+\end{align*}
+%
+From this, it is easy to conclude that the matrix $A$ is skew-symmetric, i.e., there holds
+%
+\begin{align}
+ \label{eq:skewsym}
+ A^T = -A.
+\end{align}
+%
+Recently in \cite{ranocha2023multiderivative}, we have observed that a certain class of methods behave very favorably in the context of quadratic entropies, also for nonlinear equations. In this work, we show that for linear equations, these schemes preserve the quadratic entropy explicitly, which obviously makes them highly suited as well for nonlinear equations.
+
+First, in the notation of \cite{ranocha2023multiderivative}, we consider the class of two-point collocation schemes with $m$ derivatives on both sides, given by \cite[II.13]{hairer2008solving}
+%
+\begin{align}
+ \label{eq:twopoint}
+ \sum_{k=0}^{2m} \dt^k P^{(2m-k)}(0) g^{(k)}(u^{n+1})  = \sum_{k=0}^{2m} \dt^k P^{(2m-k)}(1) g^{(k)}(u^{n}),
+\end{align}
+%
+where $P$ can be taken as the polynomial
+%
+\begin{align*}
+ P(t) = \frac{t^m(t-1)^m}{(2m)!}.
+\end{align*}
+%
+In here, we have defined $g^{(0)}(u):=u$, $g^{(1)}(u):= Au$, and $g^{(k)}(u)$ as the $k-$th temporal derivative of an exact solution $u$ to \eqref{eq:ode}. For all $k$, this amounts to
+%
+\begin{align}
+ \label{eq:temporalderivatives}
+ g^{(k)}(u) := A^k u, \qquad \forall k \in \N^{\geq 0}.
+\end{align}
+%
+In Tbl.~\ref{tbl:twopoint}, the first few schemes have been listed.
+\begin{table}
+\begin{tabular}{l|lcl}
+ $m$ & scheme \\ \hline
+ 1 & $u^{n+1}-\frac \dt 2 g^{(1)}(u^{n+1}) $&$=$&$ u^{n}+\frac \dt 2 g^{(1)}(u^{n})$ \\
+ 2 & $u^{n+1}-\frac \dt 2 g^{(1)}(u^{n+1}) + \frac {\dt^2}{12} g^{(2)}(u^{n+1}) $&$=$&$ u^{n}+\frac \dt 2 g^{(1)}(u^{n}) + \frac {\dt^2}{12} g^{(2)}(u^{n})$ \\
+ 3 & $u^{n+1}-\frac \dt 2 g^{(1)}(u^{n+1}) + \frac {\dt^2}{10} g^{(2)}(u^{n+1}) - \frac {\dt^3}{120} g^{(3)}(u^{n+1}) $&$=$&$ u^{n}+\frac \dt 2 g^{(1)}(u^{n}) + \frac {\dt^2}{10} g^{(2)}(u^{n}) + \frac {\dt^3}{120} g^{(3)}(u^{n})$
+\end{tabular}
+\caption{The first three schemes of form \eqref{eq:twopoint}.}\label{tbl:twopoint}
+\end{table}
+
+For the analysis to follow, we need the following Lemma. Its proof is an obvious consequence of the fact that the function $P$ is symmetric w.r.t. the point $t = \frac 1 2$.
+\begin{lemma}\label{la:symmetry}
+  Let $0 \leq k \leq 2m$.
+  There holds $P^{(2m-k)}(1) = P^{(2m-k)}(0)$ for an even $k$, and $P^{(2m-k)}(1) = -P^{(2m-k)}(0)$ for an uneven $k$.
+\end{lemma}
+%
+For all these schemes, $\eta$ from Eq.~\eqref{eq:entropy} is conserved if there holds $A^T=-A$, i.e., there holds $\eta(u^{n+1}) = \eta(u^n)$ if $u^{n+1}$ has been computed according to \eqref{eq:twopoint}:
+\begin{theorem}
+ Given that $u^{n+1}$ is computed according to \eqref{eq:twopoint} and there holds Eq.~\eqref{eq:skewsym}, there holds
+ \begin{align}
+  \eta(u^{n+1}) = \eta(u^n)
+ \end{align}
+ for a quadratic functional of form \eqref{eq:entropy}.
+\end{theorem}
+\begin{proof}
+Define $\alpha_k := P^{(2m-k)}(1)$ and $\alpha_k^1 := P^{(2m-k)}(0)$ for $0 \leq k \leq m$ and note that $P^{(2m-k)}(1) = P^{(2m-k)}(0) = 0$ for $k > m$. Furthermore, due to La.~\ref{la:symmetry}, there holds $\alpha_k = (-1)^k \alpha_k^1$.
+Hence, \eqref{eq:twopoint} can be written as
+%
+\begin{align}
+ \label{eq:twopointa}
+ \sum_{k=0}^{m} (-1)^k \dt^k \alpha_k g^{(k)}(u^{n+1})  = \sum_{k=0}^{m} \dt^k \alpha_k g^{(k)}(u^{n}).
+\end{align}
+%
+Using \eqref{eq:temporalderivatives}, this leads to the linear equation
+%
+\begin{align}
+ \underbrace{\left(\sum_{k=0}^{m} (-1)^k \dt^k \alpha_k A^k\right)}_{=:\A}u^{n+1}   = \underbrace{\left(\sum_{k=0}^{m} \dt^k \alpha_k A^k\right)}_{=:\mathcal B} u^n.
+\end{align}
+%
+From this, we can compute the entropy as
+%
+\begin{align*}
+ \eta(u^{n+1}) = (u^{n+1})^T u^{n+1} = (\A^{-1} \B u^n)^T \A^{-1} \B u^n = (u^n)^T \B^T \A^{-T} \A^{-1} \B u^n.
+\end{align*}
+%
+It hence remains to show that $(\A^{-1} \B)^{T} \A^{-1} \B$ is the identity, which is equivalent to $\A \A^T = \B \B^T$. Exploiting the property \eqref{eq:skewsym}, from which there follows that
+%
+\begin{align*}
+ (A^k)^T = (-1)^k A^k,
+\end{align*}
+%
+we obtain
+%
+\begin{align}
+\label{eq:atbt}
+ \begin{split}
+ \A^T &= \sum_{k=0}^{m} (-1)^k \dt^k \alpha_k (A^k)^T = \sum_{k=0}^{m} \dt^k \alpha_k A^k = \B, \\
+ \B^T &= \sum_{k=0}^{m} \dt^k \alpha_k (A^k)^T = \sum_{k=0}^{m} (-1)^k \dt^k \alpha_k A^k = \A.
+ \end{split}
+\end{align}
+Hence, there holds
+\begin{align*}
+ \A \A^T = \A \B = \B^T \B.
+\end{align*}
+%
+$\B^T$ and $\B$ are commuting matrices, as they both can be written as matrix polynomials of the same matrix $A$, see \eqref{eq:atbt}. Hence, the result follows.
+\end{proof}
+
+\newpage
+
+We consider the scheme HB-I2DRK6-3s, the sixth-order two-stage two-derivative Runge-Kutta scheme.
+The first stage is explicit, the third stage is equal to $u^{n+1}$, so only one intermediate stage remains that we denote by $\overline u$.
+%
+Hence, the scheme is given by the implicit equation
+%
+\newcommand{\ynn}{u^{n+1}}
+\newcommand{\yn}{u^n}
+\begin{align*}
+ \overline u &= \left(\Id + \dt B^{(1)}_{21} A + \dt^2 B^{(2)}_{21} A^2\right) \yn +
+ \left(\dt B^{(1)}_{22} A + \dt^2 B^{(2)}_{22} A^2 \right) \overline u + \left(\dt B^{(1)}_{23} A + \dt^2 B^{(2)}_{23} A^2 \right) \ynn \\
+ \ynn &= \left(\Id + \dt B^{(1)}_{31} A + \dt^2 B^{(2)}_{31} A^2\right) \yn +
+ \left(\dt B^{(1)}_{32} A + \dt^2 B^{(2)}_{32} A^2 \right) \overline u + \left(\dt B^{(1)}_{33} A + \dt^2 B^{(2)}_{33} A^2 \right) \ynn
+\end{align*}
+%
+with Butcher tableaux given by
+ \begin{align}\label{eq:butcher6}
+        B^{(1)} =
+        \begin{pmatrix}
+        0 & 0 & 0 \\[0.5em]
+        \frac{101}{480} & \frac{8}{30} & \frac{55}{2400} \\[0.5em]
+        \frac{7}{30} & \frac{16}{30} & \frac{7}{30} \\
+        \end{pmatrix}, \quad
+        %\widehat{a} =
+        B^{(2)} =
+        \begin{pmatrix}
+        0 & 0 & 0  \\[0.5em]
+        \frac{65}{4800} & -\frac{25}{600} &  -\frac{25}{8000} \\[0.5em]
+        \frac{5} {300} & 0 &  -\frac{5}{300}
+        \end{pmatrix}.
+\end{align}
+
+
+%
+For compactness, define
+\begin{align*}
+ \B_{ik} := \dt B^{(1)}_{ik} A + \dt^2 B^{(2)}_{ik} A^2.
+\end{align*}
+%
+Then, the linear system of equations to be solved is given by
+\begin{align*}
+\begin{pmatrix}
+ \Id - \B_{22} & - \B_{23} \\
+ -\B_{32} & \Id - \B_{33}
+\end{pmatrix}
+%
+\begin{pmatrix}
+ \overline u \\ \ynn
+\end{pmatrix}
+=
+\begin{pmatrix}
+ (\Id + \B_{21})\yn \\ (\Id + \B_{31})\yn.
+\end{pmatrix}
+\end{align*}
+%
+First, we eliminate the term $\overline u$; it can be written in terms of $\yn$ and $\ynn$ as
+\begin{align*}
+ \overline u = \left(\Id - \B_{22}\right)^{-1}\left((\Id + \B_{21}) \yn + \B_{23} \ynn\right).
+\end{align*}
+%
+Then, the remaining equation in $\ynn$ is given by
+%
+\begin{align*}
+ \underbrace{\left(-\B_{32} \left(\Id - \B_{22}\right)^{-1} \B_{23} + \Id - \B_{33} \right)}_{:=\A}\ynn =
+ \underbrace{\left(\Id + \B_{31} + \B_{32} \left(\Id - \B_{22}\right)^{-1}(\Id + \B_{21}) \right)}_{:=\B} \yn.
+\end{align*}
+%
+Now, in the same way as above, we can see that
+\begin{align*}
+ \eta(\ynn) = (\yn)^T \B^T \A^{-T} \A^{-1} \B \yn,
+\end{align*}
+%
+and we have to prove that $\A \A^T = \B \B^T$ as before.
+
+\begin{lemma}
+ The following is true for each matrix $A$ given that \eqref{eq:skewsym} holds:
+ \begin{enumerate}
+  \item $\B_{31}^T = -\B_{33}$,
+  \item $\B_{32}^T = -\B_{32}$,
+  \item $\S-\S^T = \B_{32}\S\S^T$.
+ \end{enumerate}
+
+\end{lemma}
+
+
+
+\begin{landscape}
+In the following, both $\A \A^T$ and $\B \B^T$ are computed. To simplify matters, we define $\S := (\Id - \B_{22})^{-1}$.
+
+\begin{align*}
+ &\hphantom{= } \left(-\B_{32} \S \B_{23} + \Id - \B_{33} \right) \left(-\B_{32} \S \B_{23} + \Id - \B_{33} \right)^T \\
+ &= \left(-\B_{32} \S \B_{23} + \Id - \B_{33} \right) \left(-\B_{23}^T \S^T \B_{32}^T + \Id - \B_{33}^T \right) \\
+ &= \B_{32} \S \B_{23} \B_{23}^T \S^T \B_{32}^T -\B_{32} \S \B_{23} + \B_{32} \S \B_{23} \B_{33}^T -\B_{23}^T \S^T \B_{32}^T + \Id - \B_{33}^T
+ + \B_{33} \B_{23}^T \S^T \B_{32}^T - \B_{33} + \B_{33} \B_{33}^T
+\end{align*}
+
+\begin{align*}
+ &\hphantom{=} \left(\Id + \B_{31} + \B_{32} \S(\Id + \B_{21}) \right) \left(\Id + \B_{31} + \B_{32} \S(\Id + \B_{21}) \right)^T \\
+ &= \left(\Id + \B_{31} + \B_{32} \S(\Id + \B_{21}) \right)
+ \left(\Id + \B_{31}^T + (\Id + \B_{21}^T) \S^T \B_{32}^T \right) \\
+ &= \Id + \B_{31}^T + (\Id + \B_{21}^T) \S^T \B_{32}^T
+ + \B_{31} + \B_{31} \B_{31}^T + \B_{31} (\Id + \B_{21}^T) \S^T \B_{32}^T
+ + \B_{32} \S(\Id + \B_{21}) + \B_{32} \S(\Id + \B_{21}) \B_{31}^T + \B_{32} \S(\Id + \B_{21})(\Id + \B_{21}^T) \S^T \B_{32}^T
+\end{align*}
+
+Upon comparing those two expressions:
+\begin{align*}
+ \B_{32} \S \B_{23} \B_{23}^T \S^T \B_{32}^T -\B_{32} \S \B_{23} + \B_{32} \S \B_{23} \B_{33}^T -\B_{23}^T \S^T \B_{32}^T + \Id - \B_{33}^T
+ + \B_{33} \B_{23}^T \S^T \B_{32}^T - \B_{33} + \B_{33} \B_{33}^T \stackrel{!}=\\
+ \Id + \B_{31}^T + (\Id + \B_{21}^T) \S^T \B_{32}^T
+ + \B_{31} + \B_{31} \B_{31}^T + \B_{31} (\Id + \B_{21}^T) \S^T \B_{32}^T
+ + \B_{32} \S(\Id + \B_{21}) + \B_{32} \S(\Id + \B_{21}) \B_{31}^T + \B_{32} \S(\Id + \B_{21})(\Id + \B_{21}^T) \S^T \B_{32}^T
+\end{align*}
+Using $\Id = \Id$ and $\B_{31}^T = -\B_{33}$:
+\begin{align*}
+ \B_{32} \S \B_{23} \B_{23}^T \S^T \B_{32}^T -\B_{32} \S \B_{23} + \B_{32} \S \B_{23} \B_{33}^T -\B_{23}^T \S^T \B_{32}^T
+ + \B_{33} \B_{23}^T \S^T \B_{32}^T - \B_{33} + \B_{33} \B_{33}^T \stackrel{!}=\\
+ -\B_{33} + (\Id + \B_{21}^T) \S^T \B_{32}^T
+ + \B_{33}^T \B_{33} - \B_{33}^T (\Id + \B_{21}^T) \S^T \B_{32}^T
+ + \B_{32} \S(\Id + \B_{21}) - \B_{32} \S(\Id + \B_{21}) \B_{33} + \B_{32} \S(\Id + \B_{21})(\Id + \B_{21}^T) \S^T \B_{32}^T
+\end{align*}
+\todo{$\B_{33}$ and $\B_{33}^T$ commute, as $\B_{33}^T = -\B_{31}$ and hence, $\B_{33}$ and $\B_{33}^T$ are both polynomials in $A$.} This yields
+\begin{align*}
+ \B_{32} \S \B_{23} \B_{23}^T \S^T \B_{32}^T -\B_{32} \S \B_{23} + \B_{32} \S \B_{23} \B_{33}^T -\B_{23}^T \S^T \B_{32}^T
+ + \B_{33} \B_{23}^T \S^T \B_{32}^T - \B_{33} \stackrel{!}=\\
+ -\B_{33} + (\Id + \B_{21}^T) \S^T \B_{32}^T
+  - \B_{33}^T (\Id + \B_{21}^T) \S^T \B_{32}^T
+ + \B_{32} \S(\Id + \B_{21}) - \B_{32} \S(\Id + \B_{21}) \B_{33} + \B_{32} \S(\Id + \B_{21})(\Id + \B_{21}^T) \S^T \B_{32}^T
+\end{align*}
+Using $\B_{33} = \B_{33}$:
+\begin{align*}
+ \B_{32} \S \B_{23} \B_{23}^T \S^T \B_{32}^T -\B_{32} \S \B_{23} + \B_{32} \S \B_{23} \B_{33}^T -\B_{23}^T \S^T \B_{32}^T
+ + \B_{33} \B_{23}^T \S^T \B_{32}^T \stackrel{!}=\\
+ (\Id + \B_{21}^T) \S^T \B_{32}^T
+  - \B_{33}^T (\Id + \B_{21}^T) \S^T \B_{32}^T
+ + \B_{32} \S(\Id + \B_{21}) - \B_{32} \S(\Id + \B_{21}) \B_{33} + \B_{32} \S(\Id + \B_{21})(\Id + \B_{21}^T) \S^T \B_{32}^T
+\end{align*}
+
+\end{landscape}
+
+
+\begin{landscape}
+
+Factoring out
+ \begin{align*}
+ \B_{32} \S \B_{23} \B_{23}^T \S^T \B_{32}^T -\B_{32} \S \B_{23} + \B_{32} \S \B_{23} \B_{33}^T -\B_{23}^T \S^T \B_{32}^T
+ + \B_{33} \B_{23}^T \S^T \B_{32}^T \stackrel{!}=\\
+ %
+ \S^T \B_{32}^T + \B_{21}^T \S^T \B_{32}^T
+ %
+   - \B_{33}^T \S^T \B_{32}^T - \B_{33}^T \B_{21}^T \S^T \B_{32}^T
+ %
+ + \B_{32} \S + \B_{32} \S \B_{21}
+ %
+ - \B_{32} \S \B_{33} -  \B_{32} \S \B_{21}\B_{33} \\
+ %
+%
+  +\B_{32} \S \S^T \B_{32}^T
+  + \B_{32} \S \B_{21} \S^T \B_{32}^T
+  + \B_{32} \S \B_{21}^T \S^T \B_{32}^T
+  + \B_{32} \S \B_{21}\B_{21}^T \S^T \B_{32}^T
+  %
+\end{align*}
+%
+Now use the fact that $\S-\S^T = \B_{32}\S\S^T$ and $\B_{32}^T=-\B_{32}$:
+\begin{align*}
+%
+ \B_{32} \S \B_{23} \B_{23}^T \S^T \B_{32}^T -\B_{32} \S \B_{23} + \B_{32} \S \B_{23} \B_{33}^T -\B_{23}^T \S^T \B_{32}^T
+ + \B_{33} \B_{23}^T \S^T \B_{32}^T \stackrel{!}=\\
+ %
+ %\S^T \B_{32}^T +
+ \B_{21}^T \S^T \B_{32}^T
+ %
+   - \B_{33}^T \S^T \B_{32}^T - \B_{33}^T \B_{21}^T \S^T \B_{32}^T
+ %
+ %+ \B_{32} \S +
+ +\B_{32} \S \B_{21}
+ %
+ - \B_{32} \S \B_{33} -  \B_{32} \S \B_{21}\B_{33} \\
+ %
+%
+  %+\B_{32} \S \S^T \B_{32}^T
+  + \B_{32} \S \B_{21} \S^T \B_{32}^T
+  + \B_{32} \S \B_{21}^T \S^T \B_{32}^T
+  + \B_{32} \S \B_{21}\B_{21}^T \S^T \B_{32}^T
+\end{align*}
+%
+In a similar way, we can make use of the fact that $\S\B_{23} -\B_{21}^T\S^T - \S\B_{33} -\S\B_{21}^T \S^T \B_{32} = 0$ \todo{I did the proof, fully analogously to the one with $ \S - \S^T = \B_{32} \S \S^T.$!}, resulting in
+\begin{align*}
+%
+ \B_{32} \S \B_{23} \B_{23}^T \S^T \B_{32}^T
+ %-\B_{32} \S \B_{23}
+ + \B_{32} \S \B_{23} \B_{33}^T -\B_{23}^T \S^T \B_{32}^T
+ + \B_{33} \B_{23}^T \S^T \B_{32}^T \stackrel{!}=\\
+ %
+ %\S^T \B_{32}^T +
+ % \B_{21}^T \S^T \B_{32}^T
+ %
+   - \B_{33}^T \S^T \B_{32}^T - \B_{33}^T \B_{21}^T \S^T \B_{32}^T
+ %
+ %+ \B_{32} \S +
+ +\B_{32} \S \B_{21}
+ %
+ %- \B_{32} \S \B_{33}
+ -  \B_{32} \S \B_{21}\B_{33}
+ %
+%
+  %+\B_{32} \S \S^T \B_{32}^T
+  + \B_{32} \S \B_{21} \S^T \B_{32}^T
+  %+ \B_{32} \S \B_{21}^T \S^T \B_{32}^T
+  + \B_{32} \S \B_{21}\B_{21}^T \S^T \B_{32}^T
+\end{align*}
+Now, we use $\B_{23}^T\S^T +\B_{33}^T \S^T + \S \B_{21} - \S\B_{21} \S^T \B_{32} = 0$ \todo{proved, also similar!}:
+\begin{align*}
+%
+ \B_{32} \S \B_{23} \B_{23}^T \S^T \B_{32}^T
+ %-\B_{32} \S \B_{23}
+ + \B_{32} \S \B_{23} \B_{33}^T
+ %-\B_{23}^T \S^T \B_{32}^T
+ + \B_{33} \B_{23}^T \S^T \B_{32}^T \stackrel{!}=
+ %
+ %\S^T \B_{32}^T +
+ % \B_{21}^T \S^T \B_{32}^T
+ %
+  % - \B_{33}^T \S^T \B_{32}^T
+  - \B_{33}^T \B_{21}^T \S^T \B_{32}^T
+ %
+ %+ \B_{32} \S +
+ %+\B_{32} \S \B_{21}
+ %
+ %- \B_{32} \S \B_{33}
+ -  \B_{32} \S \B_{21}\B_{33}
+ %
+%
+  %+\B_{32} \S \S^T \B_{32}^T
+  %+ \B_{32} \S \B_{21} \S^T \B_{32}^T
+  %+ \B_{32} \S \B_{21}^T \S^T \B_{32}^T
+  + \B_{32} \S \B_{21}\B_{21}^T \S^T \B_{32}^T
+\end{align*}
+%
+Also this term is equal, which can be seen with similar arguments as before.
+
+\end{landscape}
+
+
+% Using the Schur complement
+% %
+% \begin{align*}
+%  \S := \Id -\B_{22} - \B_{23} (\Id - \B_{33})^{-1} \B_{32},
+% \end{align*}
+% %
+% a solution can 'explicitly' be written as
+% \begin{align*}
+%  \begin{pmatrix} \overline u \\ \ynn \end{pmatrix}
+%  =
+%  \begin{pmatrix}
+%   \S^{-1} & \S^{-1} \B_{23} (\Id + \B_{33})^{-1} \\
+%   (\Id + \B_{33})^{-1} \B_{32} \S^{-1} & (\Id + \B_{33})^{-1} - (\Id + \B_{33})^{-1} \B_{32} \S^{-1} \B_{23} (\Id + \B_{33})^{-1}
+%  \end{pmatrix}
+% \begin{pmatrix}
+%  \overline u \\ \ynn
+% \end{pmatrix}
+% \end{align*}
+%
+
+\begin{landscape}
+  One of the things that experimentally seems to hold true is that
+  \begin{align*}
+   \S - \S^T = \B_{32} \S \S^T.
+  \end{align*}
+  I try to prove this here. \todo{The proof to follow is prototypical for all the other things that we show!}
+
+  \begin{align*}
+   \S \S^T = \left(\left(\Id - \frac{4 \dt}{15} A + \frac{\dt^2}{24} A^2\right) \left(\Id + \frac{4 \dt}{15} A + \frac{\dt^2}{24} A^2\right)\right)^{-1}
+  \end{align*}
+We multiply out the interior:
+\begin{align*}
+ &\left(\Id - \frac{4 \dt}{15} A + \frac{\dt^2}{24} A^2\right) \left(\Id + \frac{4 \dt}{15} A + \frac{\dt^2}{24} A^2\right)
+ \\ &= \Id + \frac{4 \dt}{15} A + \frac{\dt^2}{24} A^2
+ -\frac{4\dt}{15} A - \frac{16 \dt^2}{15\cdot 15} A^2 - \frac{4\dt^3}{15\cdot 24} A^3
+ + \frac{\dt^2}{24} A^2 +  \frac{4 \dt^3}{24\cdot 15} A^3 + \frac{\dt^4}{24^2} A^4 \\
+ &= \Id + \frac{\dt^2}{24} A^2
+ - \frac{16 \dt^2}{15\cdot 15} A^2
+ + \frac{\dt^2}{24} A^2 +  \frac{\dt^4}{24^2} A^4 \\
+ &= \Id + \frac{11\dt^2}{900} A^2 + \frac{\dt^4}{24^2} A^4,
+\end{align*}
+which turns out to be an even, i.e., symmetric, quantity.
+Now, there holds
+%
+\begin{align*}
+ \B_{32} \S\S^T = \frac{8 \dt}{15} A \left(\Id + \frac{11 \dt^2}{900} A^2 + \frac{\dt^4}{24^2} A^4\right)^{-1}
+\end{align*}
+%
+and
+\begin{align*}
+ \S - \S^T = \left(\Id - \frac{4 \dt}{15} A + \frac{\dt^2}{24} A^2\right)^{-1}- \left(\Id + \frac{4 \dt}{15} A + \frac{\dt^2}{24} A^2\right)^{-1}.
+\end{align*}
+%
+ $\B_{33} \S \S^T = \S - \S^T$ is now  equivalent to (note that all the matrices commute!)
+\begin{align*}
+\frac{8 \dt}{15} A \left(\Id - \frac{4 \dt}{15} A + \frac{\dt^2}{24} A^2\right)\left(\Id + \frac{4 \dt}{15} A + \frac{\dt^2}{24} A^2\right) =
+\left(\Id + \frac{11 \dt^2}{900} A^2 + \frac{\dt^4}{24^2} A^4\right)\left(\Id + \frac{4 \dt}{15} A + \frac{\dt^2}{24} A^2\right) - \left(\Id + \frac{11 \dt^2}{900} A^2 + \frac{\dt^4}{24^2} A^4\right)\left(\Id - \frac{4 \dt}{15} A + \frac{\dt^2}{24} A^2\right)
+\end{align*}
+%
+It is an easy, yet tedious, task to confirm that this is equal.
+
+
+\end{landscape}
+
+
+
+\newpage
+
+
+
+%\section*{Acknowledgments}
+
+%\input{funding}
+
+\printbibliography
+
+
+
+\end{document}

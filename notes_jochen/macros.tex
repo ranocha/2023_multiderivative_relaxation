@@ -1,0 +1,221 @@
+
+\usepackage{gensymb} % for \degree
+
+\usepackage{xparse}
+
+\let\epsilon\varepsilon
+\let\phi\varphi
+\let\rho\varrho
+
+\DeclareMathOperator{\mmod}{mod}
+\DeclareMathOperator{\Id}{Id}
+
+
+\usepackage{xspace}
+\newcommand{\cf}[0]{{cf.\@}\xspace}
+\newcommand{\eg}[0]{{e.g.\@}\xspace}
+\newcommand{\ie}[0]{{i.e.\@}\xspace}
+\newcommand{\ca}[0]{{ca.\@}\xspace}
+\newcommand{\etc}[0]{{etc.\@}\xspace}
+\newcommand{\etal}[0]{{et~al.\@}\xspace}
+\newcommand{\trixi}{Trixi.jl\xspace}
+\newcommand{\fluxo}{FLUXO\xspace}
+
+\renewcommand{\O}{\mathcal{O}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\B}{\mathcal{B}}
+\renewcommand{\S}{\mathcal{S}}
+\renewcommand{\i}{\mathrm{i}}
+\newcommand{\1}{\mathbbm{1}}
+\newcommand{\N}{\mathbb{N}}
+\providecommand\e{}% does nothing, if already defined
+\renewcommand{\e}{\mathrm{e}}
+\providecommand\Z{}% does nothing, if already defined
+\renewcommand{\Z}{\mathbb{Z}}
+\providecommand\R{}% does nothing, if already defined
+\renewcommand{\R}{\mathbb{R}}
+\providecommand\C{}% does nothing, if already defined
+\renewcommand{\C}{\mathbb{C}}
+\newcommand{\const}{\mathrm{const}}
+
+\newcommand{\bhat}{\widehat{b}}
+\newcommand{\uhat}{\widehat{u}}
+\newcommand{\qhat}{\widehat{q}}
+\newcommand{\tol}{\ensuremath{\texttt{tol}}}
+% \newcommand{\atol}{\ensuremath{\texttt{atol}}}
+% \newcommand{\rtol}{\ensuremath{\texttt{rtol}}}
+\newcommand{\atol}{\ensuremath{\tau_a}}
+\newcommand{\rtol}{\ensuremath{\tau_r}}
+\newcommand{\err}{\ensuremath{e}}
+
+\newcommand{\etanew}{\eta^{\mathrm{new}}}
+
+\newcommand{\cfl}{\nu}
+\newcommand{\maxspeed}{\lambda_\mathrm{max}}
+
+%\RK[authors/SSP]{q}[\qhat]{s}[storage][FSAL][info]
+\NewDocumentCommand{\RK}{o m O{\the\numexpr#2-1\relax} m O{} O{} o}{%
+  \IfValueTF{#1}{#1}{RK}%
+  #2(#3)#4%
+  \ifblank{#6}{}{\textsubscript{F}}%
+  \ifblank{#5}{}{[#5]}%
+  \IfValueT{#7}{#7}%
+}
+\newcommand{\ZN}{2N}
+\newcommand{\ZRp}{2R\textsubscript{+}}
+\newcommand{\ERp}{3R\textsubscript{+}}
+\newcommand{\ESstar}{3S*}
+% \newcommand{\ESstarFSAL}{3S*\textsubscript{F}}
+\newcommand{\ESstarp}{3S*\textsubscript{+}}
+% \newcommand{\ESstarpFSAL}{3S*\textsubscript{+}\textsubscript{F}}
+\newcommand{\ssp}[2]{\RK[SSP]{#2}{#1}[\ESstarp]}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\dt}{\Delta t}
+\newcommand{\dx}{\Delta x}
+
+\renewcommand{\div}{\operatorname{div}}
+\newcommand{\grad}{\operatorname{grad}}
+\newcommand{\curl}{\operatorname{curl}}
+
+\newcommand{\I}{\operatorname{I}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\kernel}{\operatorname{ker}}
+\newcommand{\image}{\operatorname{im}}
+\newcommand{\spann}{\operatorname{span}}
+
+\newcommand{\diag}{\operatorname{diag}}
+
+\newcommand{\ndims}{\ensuremath{d}}
+\newcommand{\nvariables}{\ensuremath{c}}
+\newcommand{\ndofs}{\ensuremath{\mathrm{\#DOF}}}
+\newcommand{\polydeg}{\ensuremath{p}}
+\newcommand{\PID}{\ensuremath{\mathrm{PID}}\xspace}
+\newcommand{\normal}{n}
+
+\renewcommand{\vec}[1]{\pmb{#1}}
+\newcommand{\mat}[1]{\vec{#1}}
+
+\newcommand{\Jac}{J}
+\newcommand{\covar}{(\Jac a)}
+\newcommand{\veccovar}{(\vec{\Jac a})}
+
+
+\NewDocumentCommand{\opD}{m+g}{%
+  \IfNoValueTF{#2}
+    {D_{#1}}
+    {D_{#1,#2}}%
+}
+\NewDocumentCommand{\opDsplit}{m+g}{%
+  \IfNoValueTF{#2}
+    {\widetilde{D}_{#1}}
+    {\widetilde{D}_{#1,#2}}%
+}
+\NewDocumentCommand{\opM}{g}{%
+  \IfNoValueTF{#1}
+    {M}
+    {M_{#1}}%
+}
+\NewDocumentCommand{\opQ}{g}{%
+  \IfNoValueTF{#1}
+    {Q}
+    {Q_{#1}}%
+}
+\NewDocumentCommand{\opI}{g}{%
+  \IfNoValueTF{#1}
+    {I}
+    {I_{#1}}%
+}
+\NewDocumentCommand{\opV}{g}{%
+  \IfNoValueTF{#1}
+    {V}
+    {V_{#1}}%
+}
+\NewDocumentCommand{\opB}{g}{%
+  \IfNoValueTF{#1}
+    {B}
+    {B_{#1}}%
+}
+\NewDocumentCommand{\opR}{g}{%
+  \IfNoValueTF{#1}
+    {R}
+    {R_{#1}}%
+}
+\NewDocumentCommand{\opN}{m+g}{%
+  \IfNoValueTF{#2}
+    {N_{#1}}
+    {N_{#1,#2}}%
+}
+% \NewDocumentCommand{\x}{g}{%
+%   \IfNoValueTF{#1}
+%     {\vec{x}}
+%     {\vec{x}_{#1}}%
+% }
+
+\NewDocumentCommand{\fnum}{g}{%
+  \IfNoValueTF{#1}
+    {f^{\mathrm{num}}}
+    {f^{\mathrm{num,#1}}}%
+}
+\NewDocumentCommand{\vecfnum}{g}{%
+  \IfNoValueTF{#1}
+    {\vec{f}^{\mathrm{num}}}
+    {\vec{f}^{\mathrm{num,#1}}}%
+}
+\NewDocumentCommand{\vecfcorr}{g}{%
+  \IfNoValueTF{#1}
+    {\vec{f}^{\mathrm{corr}}}
+    {\vec{f}^{\mathrm{corr,#1}}}%
+}
+\NewDocumentCommand{\fvol}{g}{%
+  \IfNoValueTF{#1}
+    {f^{\smash{\mathrm{vol}}}}
+    {f^{\smash{\mathrm{vol,#1}}}}%
+}
+\newcommand{\fBC}{f^{\mathrm{BC}}}
+
+\newcommand{\VOL}{\vec{\mathrm{VOL}}}
+
+\newcommand{\numflux}[1]{\widehat{#1}}
+
+
+% Doesn't work for ACM
+% \newcommand{\mean}[1]{\encloseby{#1}{$\{\mkern-6mu\{$}{$\}\mkern-6mu\}$}}
+% \newcommand{\prodmean}[1]{\encloseby{#1}{$(\mkern-3mu($}{$)\mkern-3mu)$}}
+% \newcommand{\jump}[1]{\encloseby{#1}{$[\mkern-3mu[$}{$]\mkern-3mu]$}}
+\newcommand{\mean}[1]{{\{\mkern-6mu\{}#1{\}\mkern-6mu\}}}
+\newcommand{\prodmean}[2]{{(\mkern-3mu(}#1\,; #2{)\mkern-3mu)}}
+\newcommand{\jump}[1]{{[\mkern-3mu[}#1{]\mkern-3mu]}}
+
+\newcommand{\logmean}[1]{\mean{#1}_\mathrm{log}}
+\newcommand{\geomean}[1]{\mean{#1}_\mathrm{geo}}
+
+
+\newcommand{\todo}[1]{{{\color{red}{TODO: #1}}}}
+
+\newcommand{\revA}[1]{{\color{red}#1}}
+\newcommand{\revB}[1]{{\color{blue}#1}}
+\newcommand{\revC}[1]{{\color{cyan}#1}}
+
+%
+
+
+% Something for PGFPLOTS
+
+\definecolor{col1}{RGB}{         0  135.4688  255.0000}
+\definecolor{col2}{RGB}{         0    9.9609  255.0000}
+\definecolor{col3}{RGB}{  115.5469         0  255.0000}
+\definecolor{col4}{RGB}{  241.0547         0  255.0000}
+\definecolor{col5}{RGB}{  255.0000         0  143.4375}
+\definecolor{col6}{RGB}{  255.0000         0   17.9297}
+
+\pgfplotscreateplotcyclelist{hierarchy6}{%
+	{col1,thick,mark=o},
+	{col2,thick,mark=pentagon},
+	{col3,thick,mark=square},
+	{col4,thick,mark=triangle},
+	{col5,thick,mark=x},
+   {col6,thick,mark=otimes}}
+
