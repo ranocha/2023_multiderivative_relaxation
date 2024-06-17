@@ -6,13 +6,16 @@
 This repository contains information and code to reproduce the results presented in the
 article
 ```bibtex
-@online{ranocha2023multiderivative,
+@article{ranocha2024multiderivative,
   title={Multiderivative time integration methods preserving nonlinear
          functionals via relaxation},
   author={Ranocha, Hendrik and Sch{\"u}tz, Jochen},
-  year={2023},
-  month={11},
-  doi={10.48550/arXiv.2311.03883},
+  journal={Communications in Applied Mathematics and Computational Science},
+  year={2024},
+  month={06},
+  volume={19},
+  issue={1},
+  doi={10.2140/camcos.2024.19.27},
   eprint={2311.03883},
   eprinttype={arxiv},
   eprintclass={math.NA}
